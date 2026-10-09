@@ -1,41 +1,22 @@
 # Valle Quebrado
 
-Juego RPG de granja y exploración desarrollado en C# con MonoGame para Android.
+RPG de granja y calabozos para Android (C# + MonoGame), mezcla de Stardew Valley y Graveyard Keeper.
 
-## Requisitos
+## Compilar el APK
 
-- .NET SDK 8
-- Android SDK
-- Workload `android`
-- JDK 17
+El APK se genera en GitHub: pestaña **Actions → Build APK → Run workflow**,
+y se descarga el artefacto `ValleQuebrado-apk`.
 
-## Instalar workloads de Android
+Compilación local (requiere SDK de Android, JDK 17 y `dotnet workload install android`):
 
 ```bash
-dotnet workload install android
+dotnet publish ValleQuebrado.csproj -c Release -f net8.0-android
 ```
 
-## Restaurar y compilar
+No se compila el proyecto Android dentro de Termux.
 
-```bash
-dotnet restore
-dotnet build ValleQuebrado.csproj -f net8.0-android
-```
+## Controles
 
-## Ejecutar en Android
-
-Puedes compilar un APK o desplegarlo en un emulador/dispositivo con:
-
-```bash
-dotnet build ValleQuebrado.csproj -f net8.0-android -t:Install
-```
-
-Si el SDK no está detectado, revisa estas variables de entorno:
-
-```bash
-echo $ANDROID_HOME
-echo $ANDROID_SDK_ROOT
-java -version
-```
-
-Si falla por SDK o workload, instala primero la herramienta de Android y luego vuelve a compilar.
+- Mitad izquierda de la pantalla: joystick virtual.
+- Mitad derecha: tocar para caminar hasta ese punto.
+- Los tiles que brillan son salidas a otras zonas.

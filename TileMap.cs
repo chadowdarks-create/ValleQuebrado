@@ -5,7 +5,8 @@ namespace ValleQuebrado.World;
 
 public enum TileType : byte
 {
-    Grass, Path, Soil, Water, Tree, Fence, Wall, Roof, Door, Rock, CaveEntrance
+    Grass, Path, Soil, Water, Tree, Fence, Wall, Roof, Door, Rock, CaveEntrance,
+    Floor, CaveWall, Sand, Exit
 }
 
 /// <summary>Cuadrícula de tiles con colisión y dibujo procedural (sin imágenes aún).</summary>
@@ -44,7 +45,7 @@ public sealed class TileMap
     public static bool IsSolid(TileType t) => t switch
     {
         TileType.Water or TileType.Tree or TileType.Fence or TileType.Wall
-            or TileType.Roof or TileType.Rock => true,
+            or TileType.Roof or TileType.Rock or TileType.CaveWall => true,
         _ => false
     };
 
@@ -155,6 +156,32 @@ public sealed class TileMap
                 Fill(sb, px, x, y, 2, 6, 28, 24, new Color(120, 120, 128));
                 Fill(sb, px, x, y, 4, 8, 10, 6, new Color(152, 152, 160));
                 Fill(sb, px, x, y, 2, 26, 28, 4, new Color(88, 88, 96));
+                break;
+
+            case TileType.Floor:
+                Fill(sb, px, x, y, 0, 0, TileSize, TileSize, new Color(96 + shade, 96 + shade, 108 + shade));
+                Fill(sb, px, x, y, 0, 0, TileSize, 1, new Color(78, 78, 90));
+                Fill(sb, px, x, y, 0, 0, 1, TileSize, new Color(78, 78, 90));
+                break;
+
+            case TileType.CaveWall:
+                Fill(sb, px, x, y, 0, 0, TileSize, TileSize, new Color(44, 40, 54));
+                Fill(sb, px, x, y, 0, 0, TileSize, 5, new Color(70, 64, 82));
+                if (h % 4 == 0)
+                    Fill(sb, px, x, y, h % 20 + 4, 10 + (h / 3) % 14, 2, 8, new Color(28, 26, 36));
+                break;
+
+            case TileType.Sand:
+                Fill(sb, px, x, y, 0, 0, TileSize, TileSize, new Color(216 + shade, 190 + shade, 120 + shade));
+                if (h % 6 == 0)
+                    Fill(sb, px, x, y, h % 24 + 3, (h / 5) % 24 + 3, 3, 2, new Color(190, 160, 96));
+                break;
+
+            case TileType.Exit:
+                Fill(sb, px, x, y, 0, 0, TileSize, TileSize, new Color(70, 58, 44));
+                float pulse = 0.55f + 0.25f * MathF.Sin(time * 3f + x);
+                Fill(sb, px, x, y, 4, 4, 24, 24, new Color(255, 226, 120) * (pulse * 0.5f));
+                Fill(sb, px, x, y, 10, 10, 12, 12, new Color(255, 236, 160) * pulse);
                 break;
 
             case TileType.CaveEntrance:

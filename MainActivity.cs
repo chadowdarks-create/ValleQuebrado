@@ -1,4 +1,3 @@
-#if ANDROID
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
@@ -26,4 +25,4 @@ public class MainActivity : AndroidGameActivity
         _game.Run();
     }
 }
-#endif
+

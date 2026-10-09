@@ -1,0 +1,40 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install Android workload
+        run: dotnet workload install android
+
+      - name: Publish APK
+        run: dotnet publish ValleQuebrado.csproj -c Release -f net8.0-android
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ValleQuebrado-apk
+          path: |
+            **/bin/Release/**/*-Signed.apk
+            **/bin/Release/**/*.apk
+          if-no-files-found: error
